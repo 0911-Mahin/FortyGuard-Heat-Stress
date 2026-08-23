@@ -1,0 +1,38 @@
+@import url("https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@600;700;800&family=IBM+Plex+Sans:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500&display=swap");
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  body {
+    @apply bg-paper text-ink font-body antialiased transition-colors duration-200
+    dark:bg-asphalt dark:text-concrete;
+  }
+  :focus-visible {
+    outline: 2px solid #f2b705;
+    outline-offset: 2px;
+  }
+}
+
+.hazard-stripe {
+  background-image: repeating-linear-gradient(
+    135deg,
+    #f2b705 0 14px,
+    #1a1918 14px 28px
+  );
+}
+
+.leaflet-container {
+  background: #f4f1e8 !important;
+  font-family: "IBM Plex Sans", sans-serif;
+}
+.dark .leaflet-container {
+  background: #1a1918 !important;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  * {
+    animation-duration: 0.001ms !important;
+    transition-duration: 0.001ms !important;
+  }
+}
