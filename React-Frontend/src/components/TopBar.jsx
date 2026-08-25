@@ -32,8 +32,8 @@ export default function TopBar({ onMenuClick, theme, onToggleTheme }) {
       <div className="flex items-center gap-3 sm:gap-4">
         <div className="flex items-center gap-2 text-xs sm:text-sm font-mono text-graphite dark:text-steel">
           <Radio size={14} className="text-risk-green" />
-          <span className="hidden sm:inline">LIVE FEED</span>
           <span>{time} {tzAbbr}</span>
+          <span className="hidden sm:inline text-xs">FEED Based on Latest<br/>Forecast 12 hours ago</span>
         </div>
         <button
           onClick={onToggleTheme}
