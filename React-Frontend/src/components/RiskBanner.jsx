@@ -40,7 +40,7 @@ export default function RiskBanner({ activeSite, horizon }) {
     return (
       <div className="shrink-0 bg-risk-red px-4 sm:px-6 py-2.5">
         <p className="text-sm font-mono text-white">
-          Failed to analyse {activeSite.name}: {activeSite.error}
+          Failed to analyse {activeSite.name}: {activeSite.error}, Try Again Later.
         </p>
       </div>
     );

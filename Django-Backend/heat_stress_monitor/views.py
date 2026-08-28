@@ -68,6 +68,19 @@ def simulate(request):
         return Response({"result": cached_sim.result})
 
     data = copy.deepcopy(job.result)
+
+    remainder = 100 - pct_greenery
+    orig_buildings = data.get("pct_buildings", 0)
+    orig_roads = data.get("pct_roads", 0)
+    orig_other_total = orig_buildings + orig_roads
+
+    if orig_other_total > 0:
+        data["pct_buildings"] = remainder * (orig_buildings / orig_other_total)
+        data["pct_roads"] = remainder * (orig_roads / orig_other_total)
+    else:
+        data["pct_buildings"] = remainder / 2
+        data["pct_roads"] = remainder / 2
+
     data["pct_greenery"] = pct_greenery
     data["predictions"] = run_inference(data)
     SimulationCache.objects.create(Job=job, pct_greenery=pct_greenery, result=data)

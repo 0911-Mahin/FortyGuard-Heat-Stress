@@ -7,6 +7,7 @@ import Legend from "./components/Legend";
 import { useSites } from "./hooks/useSites";
 import useTheme from "./hooks/useTheme";
 import OnboardingTutorial from "./components/OnboardingTutorial";
+import StorageNotice from "./components/StorageNotice"
 
 export default function App() {
   const [theme, toggleTheme] = useTheme();
@@ -27,6 +28,7 @@ export default function App() {
   return (
     <div className="h-screen w-screen flex flex-col overflow-hidden">
       <OnboardingTutorial />
+      <StorageNotice />
       <TopBar onMenuClick={() => setSidebarOpen(true)} theme={theme} onToggleTheme={toggleTheme} />
       <RiskBanner activeSite={activeSite} horizon={horizon} />
       <div className="flex flex-1 min-h-0">

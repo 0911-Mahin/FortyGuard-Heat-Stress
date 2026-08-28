@@ -51,7 +51,7 @@ export default function MapView({ sites, activeSite, horizon, onSelectSite, pinD
             radius={site.id === activeSite?.id ? 14 : 11}
             eventHandlers={{ click: () => onSelectSite(site.id) }}
             pathOptions={{
-              color,
+              color: risk?.label === 'Extreme' ? '#FFFF00' : color,
               fillColor: color,
               fillOpacity: isPending ? 0.25 : 0.55,
               weight: site.id === activeSite?.id ? 3 : 2,

@@ -98,6 +98,11 @@ export default function LocationInput({ pendingCoords, pinDropMode, onTogglePinD
     setOpen(false);
   };
 
+  const Add = (p) => {
+    setOpen(false);
+    onAddSite(`${p.name}, ${p.state}`, p.lat, p.lng);
+  }
+
   return (
     <div className="border-b border-paper-3 dark:border-asphalt-3">
       <button
@@ -113,7 +118,7 @@ export default function LocationInput({ pendingCoords, pinDropMode, onTogglePinD
 
       {open && (
         <div className="px-4 pb-4 space-y-3">
-          <CityAutocomplete onPick={(p) => onAddSite(`${p.name}, ${p.state}`, p.lat, p.lng)} />
+          <CityAutocomplete onPick={Add} />
 
           <button
             onClick={onTogglePinDrop}

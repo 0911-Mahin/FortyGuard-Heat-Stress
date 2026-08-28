@@ -27,14 +27,14 @@ export async function getStatus(jobId) {
 }
 
 /** Poll status until completed/error, or timeout. onTick optional progress callback. */
-export async function pollUntilComplete(jobId, { interval = 10000, timeout = 180000, onTick } = {}) {
+export async function pollUntilComplete(jobId, { interval = 10000, timeout = 100000, onTick } = {}) {
   const start = Date.now();
   while (Date.now() - start < timeout) {
+    await new Promise((r) => setTimeout(r, interval));
     const { status, result } = await getStatus(jobId);
     onTick?.(status);
     if (status === "completed") return result;
     if (status === "error") throw new Error(result || "Job failed");
-    await new Promise((r) => setTimeout(r, interval));
   }
   throw new Error("Polling timed out");
 }
