@@ -2,6 +2,11 @@
 
 Know exactly when it's safe to work, so your workers are not at risk
 
+
+
+https://github.com/user-attachments/assets/aeec139c-b7ff-4ce8-af81-0f71584725d7
+
+
 Demo also available on [youtube](https://youtu.be/3XXnFm0tLxE)
 
 ## Problem
