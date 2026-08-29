@@ -51,15 +51,14 @@ def stull_wet_bulb(temp_c, rh_percent):
 
 def build_payload(latitude, longitude):
     latitude, longitude = float(latitude), float(longitude)
-    current_date = datetime.datetime.now() - datetime.timedelta(hours=12)
+    current_date = datetime.datetime.now()# - datetime.timedelta(hours=12)
     date = current_date.strftime("%Y-%m-%d")
     time = current_date.strftime("%H:00")
-    date_time = {"start_date": date, "start_time": time, "filter_type": 1}
     env_payload = {
         "latitude": latitude,
         "longitude": longitude,
         "temperature": 0,
-        "date_time": date_time,
+        "date_time": {"start_date": date, "start_time": time, "filter_type": 1},
         "analysis": [
             "apparent_temperature_celsius",
             "wet_bulb_temperature_celsius",
@@ -70,25 +69,25 @@ def build_payload(latitude, longitude):
     }
     seg_payload = {
         "sat": {"latitude": latitude, "longitude": longitude},
-        "date_time": date_time,
+        "date_time": {"start_date": date, "filter_type": 3},
         "granularity": 100,
     }
 
     return env_payload, seg_payload
 
 
-def submit_and_poll(submit_url, payload, max_attempts=60, interval=3):
+def submit_and_poll(submit_url, payload, max_attempts, interval):
     submit = requests.post(submit_url, json=payload, headers=HEADERS)
     activity_id = submit.json()["data"]["activity_id"]
 
     for _ in range(max_attempts):
+        time.sleep(interval)
         res = requests.get(f"{BASE_URL}/status/{activity_id}", headers=HEADERS).json()
         status = res["data"]["status"].lower()
         if status in ("completed", "succeeded"):
             return res
         if status in ("failed", "error"):
             raise RuntimeError(f"Job {activity_id} failed: {res}")
-        time.sleep(interval)
     raise TimeoutError(f"Job {activity_id} timed out")
 
 
@@ -148,8 +147,12 @@ def poll_fortyguard(job_id, latitude, longitude):
     try:
         env_payload, seg_payload = build_payload(latitude, longitude)
 
-        env_result = submit_and_poll(BASE_URL + "/env_params", env_payload)
-        seg_result = submit_and_poll(BASE_URL + "/satellite", seg_payload)
+        env_result = submit_and_poll(BASE_URL + "/env_params", env_payload, 60, 3)
+        seg_result = {"data": {"result": {"segmentation": {"segments": {}}}}}
+        try:
+            seg_result = submit_and_poll(BASE_URL + "/satellite", seg_payload, 20, 3)
+        except Exception as e:
+            pass
 
         features = extract_features(env_result, seg_result)
         features["predictions"] = run_inference(features)
