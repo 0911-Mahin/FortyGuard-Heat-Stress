@@ -8,7 +8,7 @@ import pandas as pd
 import xgboost as xgb
 from sklearn.metrics import mean_absolute_error, mean_squared_error, r2_score
 
-CSV_PATH = "training_data_wbgt.csv"
+CSV_PATH = "training_data.csv"
 MODEL_DIR = "./Django-Backend/models"
 LOG_PATH = "./Django-Backend/models/stats/"
 

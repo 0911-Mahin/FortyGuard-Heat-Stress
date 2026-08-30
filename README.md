@@ -17,7 +17,7 @@ Workplace heat stress causes physiological heat strain in the body that can lead
 A web app that predicts Outdoor Worker Heat-Stress Risk for a given area, and translates that into decisions like "Safe to work", "Mandatory 15-min breaks every hour" or "Stop outdoor work", so organizers can plan their working shifts accordingly
 ## Features
 - Get analysis of exact location based on latitude and longitude
-- +0 to +6 hours wet-bulb temperature predictions, so shift durations can be planned effectively
+- +0 to +6 hours wet-bulb globe temperature predictions, so shift durations can be planned effectively
 - Greenery simulation, re-inference on vegetation change
     - Greenery is calculated based on old satellite images
     - Hence, changes in greenery since then can be simulated
@@ -45,7 +45,7 @@ A web app that predicts Outdoor Worker Heat-Stress Risk for a given area, and tr
 ## Architecture
 Location -> Backend (async job) -> FortyGuard APIs -> Feature extraction -> 6× XGBoost models -> Frontend (polling) -> WBGT risk classification  
 
-The user selects a location (latitude, longitude), the coordinates are sent to the backend. There, a separate thread is started to collect live data from FortyGuard's API. The collected data is organized and passed into 6 different XGBoost regressor models to predict wet bulb temperature and stored in the database, which can then be fetched by the frontend by the method of polling. The predicted wet bulb temperature is then classified into different risk levels.
+The user selects a location (latitude, longitude), the coordinates are sent to the backend. There, a separate thread is started to collect live data from FortyGuard's API. The collected data is organized and passed into 6 different XGBoost regressor models to predict wet bulb globe temperature and stored in the database, which can then be fetched by the frontend by the method of polling. The predicted wet bulb globe temperature is then classified into different risk levels.
 
 ## Data & Model
 - XGBRegressor model x6
