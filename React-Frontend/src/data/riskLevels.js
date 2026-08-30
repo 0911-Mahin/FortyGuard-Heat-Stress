@@ -14,6 +14,6 @@ export function classifyWBGT(wbgtC) {
 /** result: the `result` object from analyse/simulate. horizon 0 = current wet_bulb, 1-6 = predictions["t+Nh"] */
 export function wbgtAtHorizon(result, horizon) {
   if (!result) return null;
-  if (horizon === 0) return result.wet_bulb;
+  if (horizon === 0) return result.wbgt_now;
   return result.predictions?.[`t+${horizon}h`] ?? null;
 }

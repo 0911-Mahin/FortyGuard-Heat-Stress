@@ -1,4 +1,5 @@
 import datetime
+import logging
 import os
 import time
 from functools import lru_cache
@@ -9,6 +10,7 @@ from django.conf import settings
 
 from .models import RiskJob, SimulationCache
 
+logger = logging.getLogger(__name__)
 BASE_URL = "https://api.fortyguard.com/v1"
 HEADERS = {"api-key": settings.FG_API_KEY, "Content-Type": "application/json"}
 FEATURES = [
@@ -24,6 +26,7 @@ FEATURES = [
     "pct_buildings",
     "pct_roads",
     "pct_greenery",
+    "wbgt_now"
 ]
 
 
@@ -38,20 +41,9 @@ def load_model(horizon: int):
     return model
 
 
-def stull_wet_bulb(temp_c, rh_percent):
-    t, rh = temp_c, rh_percent
-    return (
-        t * np.arctan(0.151977 * np.sqrt(rh + 8.313659))
-        + np.arctan(t + rh)
-        - np.arctan(rh - 1.676331)
-        + 0.00391838 * (rh**1.5) * np.arctan(0.023101 * rh)
-        - 4.686035
-    )
-
-
 def build_payload(latitude, longitude):
     latitude, longitude = float(latitude), float(longitude)
-    current_date = datetime.datetime.now()# - datetime.timedelta(hours=12)
+    current_date = datetime.datetime.now()  # - datetime.timedelta(hours=12)
     date = current_date.strftime("%Y-%m-%d")
     time = current_date.strftime("%H:00")
     env_payload = {
@@ -114,20 +106,17 @@ def extract_features(env_result, seg_result):
     solar = loc["solar_irradiance"]["clear_sky"]
     day = datetime.date.fromisoformat(result["metadata"]["time_range"]["start"][:10])
     day_of_year = day.timetuple().tm_yday
-    stull = stull_wet_bulb(
-        params["apparent_temperature_celsius"][0],
-        params["relative_humidity_percent"][0],
-    )
     return {
         "hour": int(timestamp[0][11:13]),
         "day_of_year": day_of_year,
         "apparent_temp": params["apparent_temperature_celsius"][0],
         "humidity": params["relative_humidity_percent"][0],
         "cloud_cover_octas": params["cloud_cover_octas"][0],
-        "wet_bulb": max(stull, params["wet_bulb_temperature_celsius"][0]),
+        "wet_bulb": params["wet_bulb_temperature_celsius"][0],
         "ghi": solar["ghi"],
         "dni": solar["dni"],
         "dhi": solar["dhi"],
+        "wbgt_now": 0.7 * params["wet_bulb_temperature_celsius"][0] + 0.3 * params["apparent_temperature_celsius"][0]
     } | bucket_segments(seg_result)
 
 
@@ -150,9 +139,11 @@ def poll_fortyguard(job_id, latitude, longitude):
         env_result = submit_and_poll(BASE_URL + "/env_params", env_payload, 60, 3)
         seg_result = {"data": {"result": {"segmentation": {"segments": {}}}}}
         try:
-            seg_result = submit_and_poll(BASE_URL + "/satellite", seg_payload, 20, 3)
+            seg_result = submit_and_poll(BASE_URL + "/satellite", seg_payload, 15, 3)
         except Exception as e:
-            pass
+            logger.warning(
+                f"Segmentation API failed, falling back to empty segments: {e}"
+            )
 
         features = extract_features(env_result, seg_result)
         features["predictions"] = run_inference(features)

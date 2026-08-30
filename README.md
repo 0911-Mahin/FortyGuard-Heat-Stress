@@ -53,9 +53,9 @@ The user selects a location (latitude, longitude), the coordinates are sent to t
 
   | Metric | Best | Worst |
   | --- | --- | --- |
-  | MAE | 0.71 | 1.68 |
-  | RMSE | 1.20 | 2.32|
-  | R² | 0.97 | 0.91 |
+  | MAE | 0.66 | 1.92 |
+  | RMSE | 1.53 | 2.6 |
+  | R² | 0.97 | 0.88 |
 
 - Trained on a dataset of 18068 observations
 - Chronological split of 80/20 between train and validation, Denver + Charlotte held out for testing

@@ -8,7 +8,7 @@ import pandas as pd
 import xgboost as xgb
 from sklearn.metrics import mean_absolute_error, mean_squared_error, r2_score
 
-CSV_PATH = "training_data_c.csv"
+CSV_PATH = "training_data_wbgt.csv"
 MODEL_DIR = "./Django-Backend/models"
 LOG_PATH = "./Django-Backend/models/stats/"
 
@@ -29,6 +29,7 @@ FEATURES = [
     "pct_buildings",
     "pct_roads",
     "pct_greenery",
+    "wbgt_now",
 ]
 
 # force prediction to never DECREASE as these inputs increase -- prevents the

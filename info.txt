@@ -1,9 +1,5 @@
-WBT Errors in API:
-June 4–7, 2024 - Rio Grande Valley
-July 8–15, 2024 - Houston
+Reference for WBGT calculation errors/limitations:
+https://pmc.ncbi.nlm.nih.gov/articles/PMC9941479/ - (see Section 3 - Results, Table 2)
 
-WBGT Calculation Errors:
-https://pmc.ncbi.nlm.nih.gov/articles/PMC9941479/ - 3. Results -> Table 2.
-
-WBGT Classification:
+WBGT risk classification (NIOSH/OSHA flag system) used for risk decisions:
 https://en.wikipedia.org/wiki/Wet-bulb_globe_temperature
