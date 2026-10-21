@@ -9,6 +9,9 @@ https://github.com/user-attachments/assets/aeec139c-b7ff-4ce8-af81-0f71584725d7
 
 Demo also available on [youtube](https://youtu.be/3XXnFm0tLxE)
 
+> [!NOTE]
+> This project was exclusively built for the FortyGuard Hackathon'26 and requires their API key to run.
+
 ## Problem
 Workplace heat stress causes physiological heat strain in the body that can lead to exhaustion, pathological conditions and death. More than 2.4 billion workers are exposed to excessive heat globally, resulting in more than 22.85 million occupational injuries each year. More than one third of all persons who frequently work in hot conditions experience physiological heat strain. A systematic review and meta-analysis estimated that 35% of individuals who frequently work under workplace heat stress experience heat-related illnesses, including heat exhaustion and heat stroke.  
   
@@ -93,5 +96,3 @@ Add `.env` file inside folder `Django-Backend/Backend` and place the API key in 
    npm run dev
    ```
 7. Open the link mentioned in the running react server (http://localhost:5173)
-> [!NOTE]
-> Files including Data collection script, conversion of raw data into CSV, Model training etc are not uploaded but are available if needed
